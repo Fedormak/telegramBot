@@ -7,6 +7,7 @@ import telebot
 from telebot import types
 import config 
 import threading
+import polling
 
 bot = telebot.TeleBot(config.TOKEN)
 
@@ -25,20 +26,16 @@ def help(message):
 
 @bot.message_handler(commands=['supp'])
 def first_mes(message):
-    markupKeyBoard1 = types.KeyboardButton(text = 'Поделиться идеей')
-    markupKeyBoard2 = types.KeyboardButton(text = 'Рассказать о баге')
+    markupKeyBoard1 = types.KeyboardButton("Поделиться идеей")
+    markupKeyBoard2 = types.KeyboardButton("Рассказать о баге")
     markup = types.ReplyKeyboardMarkup(markupKeyBoard1,markupKeyBoard2 )
     msg = bot.send_message(message.chat.id, "Выбори что ты хочешь сделать: 1. Поделиться идеей 2. Рассказать о баге")
     bot.register_next_step_handler(msg, seconde_mes, markup)
 def seconde_mes(message):
-    #if message.text == 'Поделиться идеей':
-    #if message.text ==  'Рассказать о баге':
-    #   msg2 = bot
     msg = bot.send_message(message.chat.id, "Хорошо, опишите своё оброщение!")
     bot.register_next_step_handler(msg, last_mes)
 def last_mes(message):
-    bot.send_message(message.chat.id)
-    (message.chat.861062442, "Оброщение пользователя" + message.username + " - " + message.text)
+    bot.send_message(chat_id = 861062442, text = "Оброщение пользователя" + message.username + " - " + message.text)
 
     bot.send_message(message.chat.id, "Спасибо за оброщение! Ожидайте ответа в бижайщем будущем!")
 
